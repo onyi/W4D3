@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+
+  before_action :are_you_logged_in, except: [:new, :create]
+
   def new
     @user = User.new
     render :new
@@ -8,6 +11,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     # debugger
     if @user.save
+      login!(@user)
       redirect_to cats_url
     else
       flash.now[:errors] = @user.errors.full_messages
